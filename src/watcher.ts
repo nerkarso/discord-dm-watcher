@@ -21,15 +21,21 @@ client.on('messageCreate', async (message) => {
         const response = await fetch(Bun.env.NTFY_URL!, {
           method: 'POST',
           headers: {
-            Icon: Bun.env.NTFY_ICON || 'https://img.icons8.com/?size=192&id=M725CLW4L7wE&format=png',
+            Icon:
+              Bun.env.NTFY_ICON ||
+              message.author.avatarURL({ format: 'png', size: 128 }) ||
+              'https://img.icons8.com/?size=192&id=M725CLW4L7wE&format=png',
             Tags: 'speech_balloon',
             Click: message.url,
             Actions: `view, Open Message, ${message.url}`,
           },
-          body: `DM from ${message.author.displayName}`,
+          body: `${message.author.displayName}: ${message.cleanContent}`,
         });
 
-        if (!response.ok) throw new Error('Failed to send notification');
+        if (!response.ok) {
+          console.log(response);
+          throw new Error('Failed to send notification');
+        }
         const data = await response.json();
         consola.success('Notification sent |', data);
 
