@@ -6,11 +6,11 @@ const sessionStore = new Map<string, any>();
 const client = new Client();
 
 client.on('ready', () => {
-  consola.box(`Logged in as ${client?.user?.username}`);
+  consola.box(`Logged in as ${client.user?.username}`);
 });
 
 client.on('messageCreate', async (message) => {
-  if (message.channel.type === 'DM' && !message.author.bot) {
+  if (message.channel.type === 'DM' && message.author.id !== client.user?.id && !message.author.bot) {
     try {
       const rateLimitKey = `dm_${message.author.id}`;
       const rateLimitDuration = parseInt(Bun.env.RATE_LIMIT_DURATION || '900') * 1000;
