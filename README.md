@@ -4,7 +4,7 @@ Monitors incoming Discord DMs and sends push notifications.
 
 ## Stack
 
-- [Bun v1.1.30](https://bun.sh)
+- [Bun v1.2.4](https://bun.sh)
 - [discord.js-selfbot-v13](https://github.com/aiko-chan-ai/discord.js-selfbot-v13)
 - [ntfy](https://ntfy.sh)
 
