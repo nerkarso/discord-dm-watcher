@@ -13,11 +13,11 @@ client.on('messageCreate', async (message) => {
   if (message.channel.type === 'DM' && !message.author.bot) {
     try {
       const rateLimitKey = `dm_${message.author.id}`;
-      const rateLimitTime = 15 * 60 * 1000; // 15 minutes in milliseconds
+      const rateLimitDuration = parseInt(Bun.env.RATE_LIMIT_DURATION || '900') * 1000;
       const lastSent = sessionStore.get(rateLimitKey);
       const currentTime = Date.now();
 
-      if (!lastSent || currentTime - lastSent >= rateLimitTime) {
+      if (!lastSent || currentTime - lastSent >= rateLimitDuration) {
         const response = await fetch(Bun.env.NTFY_URL!, {
           method: 'POST',
           headers: {
