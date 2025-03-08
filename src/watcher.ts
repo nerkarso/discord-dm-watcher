@@ -23,6 +23,8 @@ client.on('messageCreate', async (message) => {
           headers: {
             Icon: Bun.env.NTFY_ICON || 'https://img.icons8.com/?size=192&id=M725CLW4L7wE&format=png',
             Tags: 'speech_balloon',
+            Click: message.url,
+            Actions: `view, Open Message, ${message.url}`,
           },
           body: `DM from ${message.author.displayName}`,
         });
