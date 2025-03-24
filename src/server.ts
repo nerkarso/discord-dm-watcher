@@ -7,16 +7,19 @@ const PORT = Bun.env.PORT || 5000;
 const routes: Record<string, (req: Request) => Promise<Response>> = {
   ...oauth2Routes,
   '/': async () => new Response('OK'),
-  '/config': async () => {
-    const dmStoreList: any[] = [];
+  '/config': async (req) => {
+    const dmStoreList = Array.from(dmStore, ([key, value]) => ({ user: key, lastSent: value }));
 
-    dmStore.forEach((value, key) => {
-      dmStoreList.push({
-        user: key,
-        lastSent: value,
-        lastSentFormatted: new Date(value).toLocaleString(),
-      });
-    });
+    if (req.headers.get('content-type') === 'text/plain') {
+      return new Response(
+        dmStoreList
+          .map((item) => `- User: ${item.user} | Last Sent: ${new Date(item.lastSent).toLocaleString()}`)
+          .join('\n'),
+        {
+          headers: { 'Content-Type': 'text/plain' },
+        }
+      );
+    }
 
     return Response.json({ dmStore: dmStoreList });
   },
