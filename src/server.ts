@@ -11,14 +11,11 @@ const routes: Record<string, (req: Request) => Promise<Response>> = {
     const dmStoreList = Array.from(dmStore, ([key, value]) => ({ user: key, lastSent: value }));
 
     if (req.headers.get('content-type') === 'text/plain') {
-      return new Response(
-        dmStoreList
+      return Response.json({
+        dmStore: dmStoreList
           .map((item) => `- User: ${item.user} | Last Sent: ${new Date(item.lastSent).toLocaleString()}`)
           .join('\n'),
-        {
-          headers: { 'Content-Type': 'text/plain' },
-        }
-      );
+      });
     }
 
     return Response.json({ dmStore: dmStoreList });
